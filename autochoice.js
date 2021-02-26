@@ -4,11 +4,14 @@ var sdcard = files.getSdcardPath();
 requestScreenCapture();
 
 function initOpts(){
-    toast("正在初始化因子列表");
     var dir = sdcard+"/脚本/MK331@github.com/pics/"
     var jpgFiles = files.listDir(dir, function(name){
         return name.endsWith(".jpg") && files.isFile(files.join(dir, name));
     });
+    // for(i = 0; i < jpgFiles.length; ++i){
+    //     jpgFiles[i] = '"' + jpgFiles[i] + '"';
+    // }
+    // log(jpgFiles);
     for(i = 0; i < jpgFiles.length; ++i){
         jpgFiles[i] = jpgFiles[i].substr(0, jpgFiles[i].length - 4);
     }
@@ -17,6 +20,7 @@ function initOpts(){
             return param1.localeCompare(param2,"zh");
         }
     );
+    
     return jpgFiles;
 }
 
@@ -26,8 +30,13 @@ function round(){
     var img = captureScreen();
     //images.resize(img, [2280,1080]);
     var isLoop = 10;
+
+    allFunc = ["初次使用初始化", "选择因子"]
+    var getPic = dialogs.singleChoice("请选择功能", allFunc);
+    if(getPic == -1)exit();
+    else if(getPic == 0)picInit();
+
     opts = initOpts();
-    toast("初始化完成");
 
     var ans = dialogs.multiChoice("请选择因子", opts);
     if(ans.length == 0 )exit();
@@ -69,12 +78,7 @@ function round(){
 }
 
 function debug(){
-    var img = captureScreen();
-    var dir = sdcard+"/脚本/MK331@github.com/pics/"
-    var tmp = images.read(dir + "refresh.png");
-    var button = findImage(img, tmp);
-    log(button.x);
-    toast("123");
+    picInit();
 }
 
 function judge(ans, img, h, w){
@@ -85,6 +89,26 @@ function judge(ans, img, h, w){
         }
     }
     return true;
+}
+
+function picInit(){
+    toast("开始下载");
+    var picName = ["refresh.png", "怪物密集.jpg", "无限能量.jpg", "敌人弹速增快.jpg", "随机武器.jpg", "多重雕像.jpg", "更强护盾.jpg", "暴击概率加倍.jpg", "更少天赋.jpg", "双数首领.jpg", "更多精英怪物.jpg", "冷却减缓.jpg", "自带配件.jpg", "更多天赋选择.jpg", "随机角色.jpg", "固定一血.jpg", "集体复活.jpg", "体型增大.jpg", "攻击加倍.jpg", "更多房间.jpg", "冷却减半.jpg", "近战限定.jpg", "攻速加倍.jpg"];
+    var dir = sdcard+"/脚本/MK331@github.com/pics/";
+    files.createWithDirs(dir);
+    for(i = 0; i < picName.length; i++){
+        if(files.isFile(dir + picName[i]))continue;
+        let res = http.get("https://cdn.jsdelivr.net/gh/MK331/autochoice/images/" + picName[i]);
+        log(res);
+        picType = picName[i].substr(picName[i].length - 3, 3);
+        if(res.statusCode == 200){
+            let img = images.fromBytes(res.body.bytes());
+            log(picName[i]);
+            var s = images.save(img, dir + picName[i], picType, 100);
+        }
+    }
+    toast("下载成功");
+    exit();
 }
 
 //debug();
