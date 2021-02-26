@@ -93,13 +93,13 @@ function judge(ans, img, h, w){
 
 function picInit(){
     toast("开始下载");
-    var picName = ["refresh.png", "怪物密集.jpg", "无限能量.jpg", "敌人弹速增快.jpg", "随机武器.jpg", "多重雕像.jpg", "更强护盾.jpg", "暴击概率加倍.jpg", "更少天赋.jpg", "双数首领.jpg", "更多精英怪物.jpg", "冷却减缓.jpg", "自带配件.jpg", "更多天赋选择.jpg", "随机角色.jpg", "固定一血.jpg", "集体复活.jpg", "体型增大.jpg", "攻击加倍.jpg", "更多房间.jpg", "冷却减半.jpg", "近战限定.jpg", "攻速加倍.jpg"];
+    var picName = ["refresh.png", "自带配件.jpg", "无限能量.jpg", "体型增大.jpg", "随机武器.jpg", "随机角色.jpg", "双数首领.jpg", "视野受限.jpg", "能量减半.jpg", "冷却减缓.jpg", "冷却减半.jpg", "禁止宠物.jpg", "近战限定.jpg", "集体复活.jpg", "坏运气.jpg", "好运气.jpg", "怪物移速增加.jpg", "怪物密集.jpg", "怪物减益缩短.jpg", "怪物减伤.jpg", "怪物分裂.jpg", "固定一血.jpg", "攻速加倍.jpg", "攻击加倍.jpg", "更少天赋选择.jpg", "更少天赋.jpg", "更强护盾.jpg", "更强攻击欲望.jpg", "更多天赋选择.jpg", "更多天赋.jpg", "更多特殊房间.jpg", "更多精英怪物.jpg", "更多房间.jpg", "多重雕像.jpg", "敌人弹速增快.jpg", "不显示参数值.jpg", "暴击概率加倍.jpg", "半血恢复.jpg"];
     var dir = sdcard+"/脚本/MK331@github.com/pics/";
     files.createWithDirs(dir);
     for(i = 0; i < picName.length; i++){
         if(files.isFile(dir + picName[i]))continue;
         let res = http.get("https://cdn.jsdelivr.net/gh/MK331/autochoice/images/" + picName[i]);
-        log(res);
+        //log(res);
         picType = picName[i].substr(picName[i].length - 3, 3);
         if(res.statusCode == 200){
             let img = images.fromBytes(res.body.bytes());
